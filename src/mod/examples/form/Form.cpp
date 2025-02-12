@@ -43,19 +43,17 @@ void sendCustomForm(Player* player) {
   form.sendTo(*player, [](Player& formPlayer, CustomFormResult const& data, FormCancelReason) {
     if (!data) formPlayer.sendMessage("You closed form");
     else {
-      std::string outputData = "You selected";
+      std::string outputData = "You selected\n";
       for (auto [name, result] : *data) {
-        static auto logDebugResult = [&](CustomFormElementResult const& var) {
-            if (std::holds_alternative<uint64_t>(var)) {
-              outputData += " name: " + name + " value: " + std::to_string(std::get<uint64_t>(var));
-            } else if (std::holds_alternative<double>(var)) {
-              outputData += " name: " + name + " value: " + std::to_string(std::get<double>(var));
-            } else if (std::holds_alternative<std::string>(var)) {
-              outputData += " name: " + name + " value: " + std::get<std::string>(var);
-            }
-        };
-        formPlayer.sendMessage(outputData);
-    }
+        if (std::holds_alternative<uint64_t>(result)) {
+          outputData += "name: " + name + " value: " + std::to_string(std::get<uint64_t>(result)) + "\n";
+        } else if (std::holds_alternative<double>(result)) {
+          outputData += "name: " + name + " value: " + std::to_string(std::get<double>(result)) + "\n";
+        } else if (std::holds_alternative<std::string>(result)) {
+          outputData += "name: " + name + " value: " + std::get<std::string>(result) + "\n";
+        }
+      }
+      formPlayer.sendMessage(outputData);
     }
   });
 }
