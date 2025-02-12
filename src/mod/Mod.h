@@ -1,15 +1,17 @@
 #pragma once
 
-#include "ll/api/mod/NativeMod.h"
+#include <ll/api/mod/NativeMod.h>
 
-namespace my_mod {
+// include Event.h for saving eventListenerPtr
+#include "examples/event/Event.h"
 
-class MyMod {
+namespace mainmod {
 
+class MainMod {
 public:
-    static MyMod& getInstance();
+    static MainMod& getInstance();
 
-    MyMod() : mSelf(*ll::mod::NativeMod::current()) {}
+    MainMod() : mSelf(*ll::mod::NativeMod::current()) {}
 
     [[nodiscard]] ll::mod::NativeMod& getSelf() const { return mSelf; }
 
@@ -22,12 +24,12 @@ public:
     /// @return True if the mod is disabled successfully.
     bool disable();
 
-    // TODO: Implement this method if you need to unload the mod.
-    // /// @return True if the mod is unloaded successfully.
-    // bool unload();
+    /// @return True if the mod is unloaded successfully.
+    bool unload();
 
 private:
     ll::mod::NativeMod& mSelf;
+    EventListener* eventListenerPtr;
 };
 
-} // namespace my_mod
+} // namespace mod
